@@ -18,7 +18,7 @@ datasource db {
 
 model User {
   // default attributes
-  id             Int              @id @default(autoincrement())
+  id             String              @id @default(uuid())
   email          String           @unique
   phone          String           @unique //how to handle validation 
   userName       String           @unique
@@ -39,14 +39,14 @@ model User {
 }
 
 model Post {
-  id                   Int              @id @default(autoincrement())
+  id             String              @id @default(uuid())
   content              String
   createdAt            DateTime         @default(now())
   updatedAt            DateTime         @updatedAt
   Poster               String
   title                String           @db.VarChar(100)
   writer               User             @relation(fields: [writerId], references: [id])
-  writerId             Int
+  writerId             String
   comment              Comment[]
   userLikedPost        Like[] // from many to many 
   userAddedToFavourite FavouritePosts[] //from many to many
@@ -54,20 +54,20 @@ model Post {
 }
 
 model Comment {
-  id        Int      @id @default(autoincrement())
+  id             String              @id @default(uuid())
   content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   user      User     @relation(fields: [userId], references: [id])
-  userId    Int
+  userId    String
   post      Post     @relation(fields: [postId], references: [id])
-  postId    Int
+  postId    String
 
   userReplyToComment Reply[] //from many to many
 }
 
 model Category {
-  id    Int            @id @default(autoincrement())
+  id             String              @id @default(uuid())
   name  String         @db.VarChar(30)
   posts PostCategory[] //from many to many
 }
@@ -75,27 +75,27 @@ model Category {
 // Many to many relationships
 model Like {
   user   User @relation(fields: [userId], references: [id])
-  userId Int
+  userId String
   post   Post @relation(fields: [postId], references: [id])
-  postId Int
+  postId String
 
   @@id([userId, postId])
 }
 
 model FavouritePosts {
   user   User @relation(fields: [userId], references: [id])
-  userId Int
+  userId String
   post   Post @relation(fields: [postId], references: [id])
-  postId Int
+  postId String
 
   @@id([userId, postId])
 }
 
 model Reply {
   user      User    @relation(fields: [userId], references: [id])
-  userId    Int
+  userId    String
   post      Comment @relation(fields: [commentId], references: [id])
-  commentId Int
+  commentId String
 
   content String
 
@@ -104,9 +104,9 @@ model Reply {
 
 model PostCategory {
   post       Post     @relation(fields: [postId], references: [id])
-  postId     Int
+  postId     String
   category   Category @relation(fields: [categoryId], references: [id])
-  categoryId Int
+  categoryId String
 
   @@id([postId, categoryId])
 }
@@ -114,9 +114,9 @@ model PostCategory {
 // recursive relationship
 model Follow {
   following   User @relation("following", fields: [followingId], references: [id])
-  followingId Int
+  followingId String
   follower    User @relation("follower", fields: [followerId], references: [id])
-  followerId  Int
+  followerId  String
 
   @@id([followerId, followingId])
 }
