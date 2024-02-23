@@ -4,7 +4,6 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
-
 // npx prisma format to format 
 
 generator client {
@@ -18,20 +17,26 @@ datasource db {
 
 model User {
   // default attributes
-  id             String              @id @default(uuid())
-  email          String           @unique
-  phone          String           @unique //how to handle validation 
-  userName       String           @unique
-  firstName      String           @db.VarChar(20)
-  lastName       String           @db.VarChar(20)
-  image          String
-  isAdmin        Boolean          @default(false)
+  id                      String           @id @default(uuid())
+  email                   String           @unique
+  phone                   String?          @unique //how to handle validation 
+  userName                String           @unique
+  firstName               String           @db.VarChar(20)
+  lastName                String           @db.VarChar(20)
+  isAdmin                 Boolean          @default(false)
+  image                   String           @default("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png")
+  password                String
+  passwordChangedAt       DateTime?
+  isVerified              Boolean          @default(false)
+  verificationToken       String?
+  passwordResetCode       String?
+  passwordResetExpireDate DateTime?
   // attributes from relations
-  posts          Post[]
-  comments       Comment[]
-  likedPosts     Like[] // from many to many
-  favouritePosts FavouritePosts[] //from many to many
-  replyOnComment Reply[] //from many to many
+  posts                   Post[]
+  comments                Comment[]
+  likedPosts              Like[] // from many to many
+  favouritePosts          FavouritePosts[] //from many to many
+  replyOnComment          Reply[] //from many to many
 
   // from recursive relationship
   followers Follow[] @relation("follower")
@@ -39,7 +44,7 @@ model User {
 }
 
 model Post {
-  id             String              @id @default(uuid())
+  id                   String           @id @default(uuid())
   content              String
   createdAt            DateTime         @default(now())
   updatedAt            DateTime         @updatedAt
@@ -54,7 +59,7 @@ model Post {
 }
 
 model Comment {
-  id             String              @id @default(uuid())
+  id        String   @id @default(uuid())
   content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -67,25 +72,25 @@ model Comment {
 }
 
 model Category {
-  id             String              @id @default(uuid())
+  id    String         @id @default(uuid())
   name  String         @db.VarChar(30)
   posts PostCategory[] //from many to many
 }
 
 // Many to many relationships
 model Like {
-  user   User @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
   userId String
-  post   Post @relation(fields: [postId], references: [id])
+  post   Post   @relation(fields: [postId], references: [id])
   postId String
 
   @@id([userId, postId])
 }
 
 model FavouritePosts {
-  user   User @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
   userId String
-  post   Post @relation(fields: [postId], references: [id])
+  post   Post   @relation(fields: [postId], references: [id])
   postId String
 
   @@id([userId, postId])
@@ -113,9 +118,9 @@ model PostCategory {
 
 // recursive relationship
 model Follow {
-  following   User @relation("following", fields: [followingId], references: [id])
+  following   User   @relation("following", fields: [followingId], references: [id])
   followingId String
-  follower    User @relation("follower", fields: [followerId], references: [id])
+  follower    User   @relation("follower", fields: [followerId], references: [id])
   followerId  String
 
   @@id([followerId, followingId])
