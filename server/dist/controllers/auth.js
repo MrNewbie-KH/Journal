@@ -16,7 +16,8 @@ exports.login = exports.signup = void 0;
 const prisma_1 = __importDefault(require("../prisma/prisma"));
 const passwordUtils_1 = require("../utils/passwordUtils");
 const jwt_1 = require("../utils/jwt");
-const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const asyncWrapper_1 = __importDefault(require("../utils/asyncWrapper"));
+const signup = (0, asyncWrapper_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // get data from body
     const user = req.body;
     // test if this user already exists in the database
@@ -33,11 +34,10 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     user.password = hashedPassword;
     // create the user
     const newUser = yield prisma_1.default.user.create({ data: user });
-    //   if user created successfully create a token for him
     const payload = (0, jwt_1.payloadOfJWT)(newUser);
     const accessToken = (0, jwt_1.createJWTAccessToken)(payload);
     res.status(200).json({ data: newUser, accessToken });
-});
+}));
 exports.signup = signup;
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // get data from body

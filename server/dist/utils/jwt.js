@@ -10,7 +10,11 @@ const payloadOfJWT = function (user) {
 };
 exports.payloadOfJWT = payloadOfJWT;
 const createJWTAccessToken = function (payload) {
-    const token = jsonwebtoken_1.default.sign(payload, "f73e0b92a27a2486e70b0bf06fc45ed1a26ae15a5ae594006a590b0f5ec47bb8cb5ce7013043721d55134ae658af20c2d979efb44d9dc2e66e8187ff7ed3c02c");
+    if (!process.env.ACCESS_TOKEN_SECRET) {
+        console.log("No secret in the env");
+        process.exit(1);
+    }
+    const token = jsonwebtoken_1.default.sign(payload, process.env.ACCESS_TOKEN_SECRET);
     return token;
 };
 exports.createJWTAccessToken = createJWTAccessToken;

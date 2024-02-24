@@ -27,10 +27,13 @@ model User {
   image                   String           @default("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png")
   password                String
   passwordChangedAt       DateTime?
-  isVerified              Boolean          @default(false)
+  // --------------
+  accountIsVerified       Boolean          @default(false)
   verificationToken       String?
-  passwordResetCode       String?
+  // --------------
+  passwordResetToken       String?
   passwordResetExpireDate DateTime?
+  // --------------
   // attributes from relations
   posts                   Post[]
   comments                Comment[]
