@@ -18,7 +18,7 @@ const validateLogin = (login: { email: string; password: string }) => {
   // create the chema
   const loginSchema = Joi.object({
     email: Joi.string().email().required(),
-    password: Joi.string().min(8).max(20).required(),
+    password: Joi.string().required(),
   });
   return loginSchema.validate(login);
 };

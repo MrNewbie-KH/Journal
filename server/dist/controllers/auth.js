@@ -40,13 +40,12 @@ const signup = (0, asyncWrapper_1.default)((req, res, next) => __awaiter(void 0,
     user.password = hashedPassword;
     // create the user
     const newUser = yield prisma_1.default.user.create({ data: user });
-    const payload = (0, jwt_1.payloadOfJWT)(newUser);
     // send email ti him to verify he is the one 
-    const accessToken = (0, jwt_1.createJWTAccessToken)(payload);
+    const accessToken = (0, jwt_1.createJWTAccessToken)(newUser);
     res.status(200).json({ data: newUser, accessToken });
 }));
 exports.signup = signup;
-const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const login = (0, asyncWrapper_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     // get data from body
     const user = req.body;
     const valid = (0, authValidation_1.validateLogin)(user);
@@ -67,8 +66,7 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
         throw new Error("Password or email is not correct");
     }
     //   if user passed successfully create a token for him
-    const payload = (0, jwt_1.payloadOfJWT)(userAlreadyExist);
-    const accessToken = (0, jwt_1.createJWTAccessToken)(payload);
+    const accessToken = (0, jwt_1.createJWTAccessToken)(userAlreadyExist);
     res.status(200).json({ data: userAlreadyExist, accessToken });
-});
+}));
 exports.login = login;

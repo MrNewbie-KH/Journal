@@ -1,29 +1,24 @@
-import jwt from "jsonwebtoken"
-type Payload ={
-    id:string,
-    email:string
-    
-}
-type User ={
-    id:string,
-    email:string
+import { User } from "@prisma/client";
+import { Payload } from "@prisma/client/runtime/library";
+import jwt from "jsonwebtoken";
 
-}
-const payloadOfJWT = function(user:User): Payload{
-    
-    return {id:user.id,email:user.email}
-}
+const createJWTAccessToken = function (user: User) {
+  if (!process.env.ACCESS_TOKEN_SECRET) {
+    console.log("No secret in the env");
 
-const createJWTAccessToken = function(payload:Payload){
-    if(!process.env.ACCESS_TOKEN_SECRET){
-        console.log("No secret in the env");
-        
-        process.exit(1)
-    }
-    const token = jwt.sign(payload,process.env.ACCESS_TOKEN_SECRET)
-return token
-}
-export {
-    payloadOfJWT,
-    createJWTAccessToken
-}
+    process.exit(1);
+  }
+  const token = jwt.sign(user.id, process.env.ACCESS_TOKEN_SECRET);
+  return token;
+};
+const verifyAcconut = function (token: string): Payload<string> {
+  if (!process.env.ACCESS_TOKEN_SECRET) {
+    console.log("No secret in the env");
+
+    process.exit(1);
+  }
+  const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+  
+  return decoded;
+};
+export { createJWTAccessToken, verifyAcconut };
