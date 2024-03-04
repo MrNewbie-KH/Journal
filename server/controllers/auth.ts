@@ -10,6 +10,7 @@ const signup = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
     // get data from body
     const user: {
+      nothing:string,clear
       email: string;
       password: string;
       firstName: string;
