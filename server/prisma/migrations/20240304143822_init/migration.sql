@@ -3,21 +3,19 @@ CREATE TABLE `User` (
     `id` VARCHAR(191) NOT NULL,
     `email` VARCHAR(191) NOT NULL,
     `phone` VARCHAR(191) NULL,
-    `userName` VARCHAR(191) NOT NULL,
     `firstName` VARCHAR(20) NOT NULL,
     `lastName` VARCHAR(20) NOT NULL,
     `isAdmin` BOOLEAN NOT NULL DEFAULT false,
     `image` VARCHAR(191) NOT NULL DEFAULT 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png',
     `password` VARCHAR(191) NOT NULL,
     `passwordChangedAt` DATETIME(3) NULL,
-    `isVerified` BOOLEAN NOT NULL DEFAULT false,
+    `accountIsVerified` BOOLEAN NOT NULL DEFAULT false,
     `verificationToken` VARCHAR(191) NULL,
-    `passwordResetCode` VARCHAR(191) NULL,
+    `passwordResetToken` VARCHAR(191) NULL,
     `passwordResetExpireDate` DATETIME(3) NULL,
 
     UNIQUE INDEX `User_email_key`(`email`),
     UNIQUE INDEX `User_phone_key`(`phone`),
-    UNIQUE INDEX `User_userName_key`(`userName`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 

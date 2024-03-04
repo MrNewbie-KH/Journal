@@ -17,9 +17,15 @@ const prisma_1 = __importDefault(require("../prisma/prisma"));
 const passwordUtils_1 = require("../utils/passwordUtils");
 const jwt_1 = require("../utils/jwt");
 const asyncWrapper_1 = __importDefault(require("../utils/asyncWrapper"));
-const signup = (0, asyncWrapper_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const errorClass_1 = require("../errors/errorClass");
+const authValidation_1 = require("../validation/authValidation");
+const signup = (0, asyncWrapper_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     // get data from body
     const user = req.body;
+    const valid = (0, authValidation_1.validateSignup)(user);
+    if (valid.error) {
+        return next(new errorClass_1.AppError("All data fields must be provided", 400));
+    }
     // test if this user already exists in the database
     const userAlreadyExist = yield prisma_1.default.user.findUnique({
         where: {
@@ -27,7 +33,7 @@ const signup = (0, asyncWrapper_1.default)((req, res) => __awaiter(void 0, void 
         },
     });
     if (userAlreadyExist) {
-        throw new Error("User already exists");
+        return next(new errorClass_1.AppError("This user already exists", 400));
     }
     //   if not  hash the user password
     const hashedPassword = (0, passwordUtils_1.hashPassword)(user.password);
@@ -35,13 +41,18 @@ const signup = (0, asyncWrapper_1.default)((req, res) => __awaiter(void 0, void 
     // create the user
     const newUser = yield prisma_1.default.user.create({ data: user });
     const payload = (0, jwt_1.payloadOfJWT)(newUser);
+    // send email ti him to verify he is the one 
     const accessToken = (0, jwt_1.createJWTAccessToken)(payload);
     res.status(200).json({ data: newUser, accessToken });
 }));
 exports.signup = signup;
-const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     // get data from body
     const user = req.body;
+    const valid = (0, authValidation_1.validateLogin)(user);
+    if (valid.error) {
+        return next(new errorClass_1.AppError("All data fields must be provided", 400));
+    }
     // test if this user already exists in the database
     const userAlreadyExist = yield prisma_1.default.user.findUnique({
         where: {
@@ -49,7 +60,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         },
     });
     if (!userAlreadyExist) {
-        throw new Error("Password or email is not correct");
+        return next(new errorClass_1.AppError("Password or email is not correct", 400));
     }
     const isPasswordCorrect = yield (0, passwordUtils_1.passwordCompare)(user.password, userAlreadyExist.password);
     if (!isPasswordCorrect) {
