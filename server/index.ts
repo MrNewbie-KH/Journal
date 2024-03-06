@@ -6,6 +6,7 @@ const PORT = process.env.PORT;
 // routes import 
 import authRouter from "./routes/auth";
 import userRouter from "./routes/user";
+import postRouter from "./routes/post";
 import { User } from '@prisma/client';
 import errorHandlerMiddleware from './middlewares/errorHandlerMiddleware';
 // ======================================
@@ -21,6 +22,7 @@ declare global {
 }
 app.use("/api/v1/auth",authRouter);
 app.use("/api/v1/users",userRouter);
+app.use("/api/v1/posts",postRouter);
 app.get("/", (req: Request, res: Response) => {
   res.send("Ts is here now");
 });

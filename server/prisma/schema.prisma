@@ -50,7 +50,7 @@ model Post {
   content              String
   createdAt            DateTime         @default(now())
   updatedAt            DateTime         @updatedAt
-  Poster               String
+  poster               String?
   title                String           @db.VarChar(100)
   writer               User             @relation(fields: [writerId], references: [id])
   writerId             String
