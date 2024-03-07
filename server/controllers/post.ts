@@ -107,11 +107,19 @@ const deletePost = asyncWrapper(
     if(!post){
         res.status(401).json({message:"Not authorized to delete the post"})
     }
-     await prisma.post.delete({
+    await prisma.$transaction([
+      prisma.comment.deleteMany({
+        where: {
+          postId,
+        },
+      }),
+      prisma.post.delete({
         where: {
           id: postId,
-        }
-      });
+        },
+      }),
+    ]);
+    
     res.status(204).json({ message:"Post deleted successfully" });
   }    
   
