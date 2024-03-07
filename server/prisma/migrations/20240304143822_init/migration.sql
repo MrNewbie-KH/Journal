@@ -1,48 +1,52 @@
 -- CreateTable
 CREATE TABLE `User` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `id` VARCHAR(191) NOT NULL,
     `email` VARCHAR(191) NOT NULL,
-    `phone` VARCHAR(191) NOT NULL,
-    `userName` VARCHAR(191) NOT NULL,
+    `phone` VARCHAR(191) NULL,
     `firstName` VARCHAR(20) NOT NULL,
     `lastName` VARCHAR(20) NOT NULL,
-    `image` VARCHAR(191) NOT NULL,
     `isAdmin` BOOLEAN NOT NULL DEFAULT false,
+    `image` VARCHAR(191) NOT NULL DEFAULT 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png',
+    `password` VARCHAR(191) NOT NULL,
+    `passwordChangedAt` DATETIME(3) NULL,
+    `accountIsVerified` BOOLEAN NOT NULL DEFAULT false,
+    `verificationToken` VARCHAR(191) NULL,
+    `passwordResetToken` VARCHAR(191) NULL,
+    `passwordResetExpireDate` DATETIME(3) NULL,
 
     UNIQUE INDEX `User_email_key`(`email`),
     UNIQUE INDEX `User_phone_key`(`phone`),
-    UNIQUE INDEX `User_userName_key`(`userName`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `Post` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `id` VARCHAR(191) NOT NULL,
     `content` VARCHAR(191) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
     `Poster` VARCHAR(191) NOT NULL,
     `title` VARCHAR(100) NOT NULL,
-    `writerId` INTEGER NOT NULL,
+    `writerId` VARCHAR(191) NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `Comment` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `id` VARCHAR(191) NOT NULL,
     `content` VARCHAR(191) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
-    `userId` INTEGER NOT NULL,
-    `postId` INTEGER NOT NULL,
+    `userId` VARCHAR(191) NOT NULL,
+    `postId` VARCHAR(191) NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `Category` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `id` VARCHAR(191) NOT NULL,
     `name` VARCHAR(30) NOT NULL,
 
     PRIMARY KEY (`id`)
@@ -50,24 +54,24 @@ CREATE TABLE `Category` (
 
 -- CreateTable
 CREATE TABLE `Like` (
-    `userId` INTEGER NOT NULL,
-    `postId` INTEGER NOT NULL,
+    `userId` VARCHAR(191) NOT NULL,
+    `postId` VARCHAR(191) NOT NULL,
 
     PRIMARY KEY (`userId`, `postId`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `FavouritePosts` (
-    `userId` INTEGER NOT NULL,
-    `postId` INTEGER NOT NULL,
+    `userId` VARCHAR(191) NOT NULL,
+    `postId` VARCHAR(191) NOT NULL,
 
     PRIMARY KEY (`userId`, `postId`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `Reply` (
-    `userId` INTEGER NOT NULL,
-    `commentId` INTEGER NOT NULL,
+    `userId` VARCHAR(191) NOT NULL,
+    `commentId` VARCHAR(191) NOT NULL,
     `content` VARCHAR(191) NOT NULL,
 
     PRIMARY KEY (`userId`, `commentId`)
@@ -75,16 +79,16 @@ CREATE TABLE `Reply` (
 
 -- CreateTable
 CREATE TABLE `PostCategory` (
-    `postId` INTEGER NOT NULL,
-    `categoryId` INTEGER NOT NULL,
+    `postId` VARCHAR(191) NOT NULL,
+    `categoryId` VARCHAR(191) NOT NULL,
 
     PRIMARY KEY (`postId`, `categoryId`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `Follow` (
-    `followingId` INTEGER NOT NULL,
-    `followerId` INTEGER NOT NULL,
+    `followingId` VARCHAR(191) NOT NULL,
+    `followerId` VARCHAR(191) NOT NULL,
 
     PRIMARY KEY (`followerId`, `followingId`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
