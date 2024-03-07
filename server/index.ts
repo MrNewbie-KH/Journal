@@ -7,6 +7,7 @@ const PORT = process.env.PORT;
 import authRouter from "./routes/auth";
 import userRouter from "./routes/user";
 import postRouter from "./routes/post";
+import commentRouter from "./routes/comment";
 import categoryRouter from "./routes/category";
 import { User } from '@prisma/client';
 import errorHandlerMiddleware from './middlewares/errorHandlerMiddleware';
@@ -25,6 +26,7 @@ app.use("/api/v1/auth",authRouter);
 app.use("/api/v1/users",userRouter);
 app.use("/api/v1/posts",postRouter);
 app.use("/api/v1/categories",categoryRouter);
+app.use("/api/v1/comments",commentRouter);
 app.get("/", (req: Request, res: Response) => {
   res.send("Ts is here now");
 });
